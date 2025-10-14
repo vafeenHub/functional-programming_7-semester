@@ -11,7 +11,7 @@ HS_SOURCES := $(wildcard *.hs)
 
 # Если нет .hs файлов, используем main.hs по умолчанию
 ifeq ($(HS_SOURCES),)
-HS_SOURCES := main.hs
+HS_SOURCES := *.hs
 endif
 
 # Основной исходный файл (первый из списка или main.hs)
@@ -25,14 +25,13 @@ CLEAN_FILES := *.hi *.o $(TARGET)
 
 .PHONY: all run clean rebuild info
 
-all: $(TARGET)
+all: $(TARGET) run 
 
 $(TARGET): $(HS_SOURCES)
 	$(GHC) $(GHC_FLAGS) --make $(MAIN_SOURCE) -o $@
 
 run: $(TARGET)
 	./$(TARGET)
-
 
 clean:
 	rm -f $(CLEAN_FILES)
