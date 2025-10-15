@@ -11,11 +11,11 @@ dayOrder day = case day of
   _           -> 100 -- Для неизвестных значений
 
 -- | Быстрая сортировка для дней недели с использованием dayOrder
-dayQuickSort :: [String] -> [String]
-dayQuickSort [] = []
-dayQuickSort (pivot:rest) =
-  let smallerSorted = dayQuickSort [x | x <- rest, dayOrder x <= dayOrder pivot]
-      biggerSorted  = dayQuickSort [x | x <- rest, dayOrder x > dayOrder pivot]
+dayQuickSortDays :: [String] -> [String]
+dayQuickSortDays [] = []
+dayQuickSortDays (pivot:rest) =
+  let smallerSorted = dayQuickSortDays [x | x <- rest, dayOrder x <= dayOrder pivot]
+      biggerSorted  = dayQuickSortDays [x | x <- rest, dayOrder x > dayOrder pivot]
   in smallerSorted ++ [pivot] ++ biggerSorted
 
 -- | Ваша универсальная функция быстрой сортировки для типов с Ord
@@ -35,7 +35,7 @@ main = do
       sortedStrings = quicksort unsortedStrings
 
       unsortedDays = ["Wednesday", "Monday", "Sunday", "Friday", "Tuesday"]
-      sortedDays = dayQuickSort unsortedDays
+      sortedDays = dayQuickSortDays unsortedDays
 
   putStrLn "Исходный список чисел:"
   print unsortedNumbers
