@@ -11,12 +11,10 @@
 -- @return кортеж (средняя урожайность по всей территории, общее количество пшеницы)
 calculateWheatStats :: [Double] -> [Double] -> (Double, Double)
 calculateWheatStats hectares yields =
-    let totalHectares = sum hectares                                              -- Сумма всех гектаров
-        totalYield = sum (zipWith (*) hectares yields)                           -- Общий тоннаж: произведение гектаров на урожайность
-        averageYield = if totalHectares == 0 then 0 else totalYield / totalHectares  -- Средняя урожайность
-    in (averageYield, totalYield)
-
-
+  let totalHectares = sum hectares -- Сумма всех гектаров
+      totalYield = sum (zipWith (*) hectares yields) -- Общий тоннаж: произведение гектаров на урожайность
+      averageYield = if totalHectares == 0 then 0 else totalYield / totalHectares -- Средняя урожайность
+   in (averageYield, totalYield)
 
 -- Задача 26.
 -- Задано натуральное число k, найти все натуральные решения (x, y) уравнения 𝑥^2 + 𝑦^2 = 𝑘^2.
@@ -27,13 +25,12 @@ calculateWheatStats hectares yields =
 -- @param k натуральное число (гипотенуза)
 -- @return список всех пар (x, y), где x^2 + y^2 = k^2
 findSolutions :: Int -> [(Int, Int)]
-findSolutions k = 
-    [ (x, y) 
-    | x <- [1..k]
-    , y <- [1..k]
-    , x*x + y*y == k*k
-    ]
-
+findSolutions k =
+  [ (x, y)
+    | x <- [1 .. k],
+      y <- [1 .. k],
+      x * x + y * y == k * k
+  ]
 
 -- Задача 52.
 -- Найти все целые числа из промежутка от a до b, у которых количество делителей равно k.
@@ -42,7 +39,7 @@ findSolutions k =
 -- @param n целое число
 -- @return количество делителей числа n
 countDivisors :: Int -> Int
-countDivisors n = length [d | d <- [1..abs n], n `mod` d == 0]
+countDivisors n = length [d | d <- [1 .. abs n], n `mod` d == 0]
 
 -- | Находит все числа из диапазона [a..b], у которых ровно k делителей.
 -- @param a начало диапазона
@@ -50,8 +47,7 @@ countDivisors n = length [d | d <- [1..abs n], n `mod` d == 0]
 -- @param k требуемое количество делителей
 -- @return список чисел с k делителями
 findNumbersWithKDivisors :: Int -> Int -> Int -> [Int]
-findNumbersWithKDivisors a b k = [x | x <- [a..b], countDivisors x == k]
-
+findNumbersWithKDivisors a b k = [x | x <- [a .. b], countDivisors x == k]
 
 -- Задача 53.
 -- Натуральное число называется «совершенным», если оно равно сумме своих делителей,
@@ -64,14 +60,14 @@ findNumbersWithKDivisors a b k = [x | x <- [a..b], countDivisors x == k]
 -- @return True, если число совершенное, иначе False
 isPerfect :: Int -> Bool
 isPerfect num = sum (divisors num) == num
-  where divisors x = [d | d <- [1..x - 1], x `mod` d == 0]
+  where
+    divisors x = [d | d <- [1 .. x - 1], x `mod` d == 0]
 
 -- | Находит все совершенные числа меньше n
 -- @param n верхняя граница поиска (не включительно)
 -- @return список совершенных чисел менее n
 findPerfectNumbers :: Int -> [Int]
-findPerfectNumbers n = [x | x <- [2..n-1], isPerfect x]
-
+findPerfectNumbers n = [x | x <- [2 .. n - 1], isPerfect x]
 
 -- Задача 59.
 -- Гипотеза Гольдбаха гласит, что каждое положительное четное число больше 2 является суммой двух простых чисел.
@@ -85,13 +81,13 @@ findPerfectNumbers n = [x | x <- [2..n-1], isPerfect x]
 -- @return True, если число простое, иначе False
 isPrime :: Int -> Bool
 isPrime x
-  | x < 2 = False                          -- Числа меньше 2 не простые
-  | otherwise = checkDivisors 2            -- Проверка делителей от 2 до корня из x
+  | x < 2 = False -- Числа меньше 2 не простые
+  | otherwise = checkDivisors 2 -- Проверка делителей от 2 до корня из x
   where
     limit = floor (sqrt (fromIntegral x)) -- Верхняя граница с плавающей точкой проверки делителей
     checkDivisors current
-      | current > limit = True             -- Если проверили все делители, число простое
-      | x `mod` current == 0 = False      -- Найден делитель, число составное
+      | current > limit = True -- Если проверили все делители, число простое
+      | x `mod` current == 0 = False -- Найден делитель, число составное
       | otherwise = checkDivisors (current + 1) -- Проверяем следующий делитель
 
 -- | Находит все пары простых чисел, сумма которых равна n (только для четных n > 2)
@@ -99,14 +95,14 @@ isPrime x
 -- @return список кортежей (p, q), где p и q простые, p+q = n
 goldbachPairsForNumber :: Int -> [(Int, Int)]
 goldbachPairsForNumber n
-  | n <= 2 = []                   -- Нет решений для чисел <= 2
-  | odd n = []                   -- Нет решений для нечетных чисел
-  | otherwise = findPairs 2 []    -- Ищем пары начиная с 2
+  | n <= 2 = [] -- Нет решений для чисел <= 2
+  | odd n = [] -- Нет решений для нечетных чисел
+  | otherwise = findPairs 2 [] -- Ищем пары начиная с 2
   where
-    half = n `div` 2              -- Перебираем числа до половины n
+    half = n `div` 2 -- Перебираем числа до половины n
     -- Рекурсивно перебираем кандидаты p, собираем подходящие пары в acc
     findPairs p acc
-      | p > half = acc            -- Если p превысил половину, возвращаем накопленные пары
+      | p > half = acc -- Если p превысил половину, возвращаем накопленные пары
       | isPrime p && isPrime (n - p) = findPairs (p + 1) ((p, n - p) : acc)
       | otherwise = findPairs (p + 1) acc
 
@@ -116,60 +112,58 @@ goldbachPairsForNumber n
 -- @return список всех пар простых чисел, сумма которых равна четным числам в [a..b]
 goldbachPairsInRange :: Int -> Int -> [(Int, Int)]
 goldbachPairsInRange a b =
-  concatMap goldbachPairsForNumber evenNumbers  -- Для каждого чётного числа из списка evenNumbers вызываем goldbachPairsForNumber, результирующие списки соединяем в один
+  concatMap goldbachPairsForNumber evenNumbers -- Для каждого чётного числа из списка evenNumbers вызываем goldbachPairsForNumber, результирующие списки соединяем в один
   where
-    numbersInRange = [a..b]                      -- Создаем список всех чисел от a до b включительно
-    filteredNumbers = filter (> 2) numbersInRange  -- Отфильтровываем числа, оставляя только те, которые больше 2
-    evenNumbers = filter even filteredNumbers    -- Из оставшихся чисел выбираем только чётные
-
-
+    numbersInRange = [a .. b] -- Создаем список всех чисел от a до b включительно
+    filteredNumbers = filter (> 2) numbersInRange -- Отфильтровываем числа, оставляя только те, которые больше 2
+    evenNumbers = filter even filteredNumbers -- Из оставшихся чисел выбираем только чётные
 
 -- | Основная функция, запускающая и печатающая решения всех задач
 main :: IO ()
 main = do
-    -- Задача 21
-    let hectares = [10.0, 20.0, 15.0]
-    let yields = [2.5, 3.0, 2.0]
-    let (avgYield, totalWheat) = calculateWheatStats hectares yields
-    putStrLn "Задача 21:"
-    putStrLn $ "Средняя урожайность по всей территории: " ++ show avgYield ++ " тонн/га"
-    putStrLn $ "Общее количество собранной пшеницы: " ++ show totalWheat ++ " тонн"
+  -- Задача 21
+  let hectares = [10.0, 20.0, 15.0]
+  let yields = [2.5, 3.0, 2.0]
+  let (avgYield, totalWheat) = calculateWheatStats hectares yields
+  putStrLn "Задача 21:"
+  putStrLn $ "Средняя урожайность по всей территории: " ++ show avgYield ++ " тонн/га"
+  putStrLn $ "Общее количество собранной пшеницы: " ++ show totalWheat ++ " тонн"
 
-    putStrLn "\n------------------------------------\n"
+  putStrLn "\n------------------------------------\n"
 
-    -- Задача 26
-    let k = 5
-    let solutions = findSolutions k
-    putStrLn "Задача 26:"
-    putStrLn $ "Решения уравнения x^2 + y^2 = " ++ show k ++ "^2:"
-    mapM_ print solutions
+  -- Задача 26
+  let k = 5
+  let solutions = findSolutions k
+  putStrLn "Задача 26:"
+  putStrLn $ "Решения уравнения x^2 + y^2 = " ++ show k ++ "^2:"
+  mapM_ print solutions
 
-    putStrLn "\n------------------------------------\n"
+  putStrLn "\n------------------------------------\n"
 
-    -- Задача 52
-    let a = 1
-    let b = 30
-    let kDiv = 4
-    let nums = findNumbersWithKDivisors a b kDiv
-    putStrLn "Задача 52:"
-    putStrLn $ "Числа из диапазона [" ++ show a ++ ", " ++ show b ++ "] с " ++ show kDiv ++ " делителями:"
-    print nums
+  -- Задача 52
+  let a = 1
+  let b = 30
+  let kDiv = 4
+  let nums = findNumbersWithKDivisors a b kDiv
+  putStrLn "Задача 52:"
+  putStrLn $ "Числа из диапазона [" ++ show a ++ ", " ++ show b ++ "] с " ++ show kDiv ++ " делителями:"
+  print nums
 
-    putStrLn "\n------------------------------------\n"
+  putStrLn "\n------------------------------------\n"
 
-    -- Задача 53
-    let n = 30
-    let perfectNumbers = findPerfectNumbers n
-    putStrLn "Задача 53:"
-    putStrLn $ "Совершенные числа менее " ++ show n ++ ":"
-    print perfectNumbers
+  -- Задача 53
+  let n = 30
+  let perfectNumbers = findPerfectNumbers n
+  putStrLn "Задача 53:"
+  putStrLn $ "Совершенные числа менее " ++ show n ++ ":"
+  print perfectNumbers
 
-    putStrLn "\n------------------------------------\n"
+  putStrLn "\n------------------------------------\n"
 
-    -- Задача 59
-    let start = 9
-    let end = 20
-    let result59 = goldbachPairsInRange start end
-    putStrLn "Задача 59:"
-    putStrLn $ "Пары простых чисел, сумма которых равна четным числам в диапазоне [" ++ show start ++ ", " ++ show end ++ "]:"
-    print result59
+  -- Задача 59
+  let start = 9
+  let end = 20
+  let result59 = goldbachPairsInRange start end
+  putStrLn "Задача 59:"
+  putStrLn $ "Пары простых чисел, сумма которых равна четным числам в диапазоне [" ++ show start ++ ", " ++ show end ++ "]:"
+  print result59
