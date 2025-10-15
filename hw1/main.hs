@@ -1,18 +1,53 @@
--- | Функция быстрой сортировки
--- Принимает на вход список элементов, которые можно сравнивать (Ord)
--- Возвращает отсортированный список по возрастанию
+-- | Определяем порядок дней недели (Monday - 1, Sunday - 7)
+dayOrder :: String -> Int
+dayOrder day = case day of
+  "Monday"    -> 1
+  "Tuesday"   -> 2
+  "Wednesday" -> 3
+  "Thursday"  -> 4
+  "Friday"    -> 5
+  "Saturday"  -> 6
+  "Sunday"    -> 7
+  _           -> 100 -- Для неизвестных значений
+
+-- | Быстрая сортировка для дней недели с использованием dayOrder
+dayQuickSort :: [String] -> [String]
+dayQuickSort [] = []
+dayQuickSort (pivot:rest) =
+  let smallerSorted = dayQuickSort [x | x <- rest, dayOrder x <= dayOrder pivot]
+      biggerSorted  = dayQuickSort [x | x <- rest, dayOrder x > dayOrder pivot]
+  in smallerSorted ++ [pivot] ++ biggerSorted
+
+-- | Ваша универсальная функция быстрой сортировки для типов с Ord
 quicksort :: (Ord a) => [a] -> [a]
 quicksort [] = []
 quicksort (pivot : rest) =
   let smallerSorted = quicksort [x | x <- rest, x <= pivot]
       biggerSorted = quicksort [x | x <- rest, x > pivot]
-   in smallerSorted ++ [pivot] ++ biggerSorted
+  in smallerSorted ++ [pivot] ++ biggerSorted
 
 main :: IO ()
 main = do
-  let unsortedList = [5, 3, 8, 1, 2, 7, 4, 6]
-      sortedList = quicksort unsortedList
-  putStrLn "Исходный список:"
-  print unsortedList
-  putStrLn "Отсортированный список:"
-  print sortedList
+  let unsortedNumbers = [5, 3, 8, 1, 2, 7, 4, 6]
+      sortedNumbers = quicksort unsortedNumbers
+
+      unsortedStrings = ["apple", "banana", "orange", "pear", "kiwi"]
+      sortedStrings = quicksort unsortedStrings
+
+      unsortedDays = ["Wednesday", "Monday", "Sunday", "Friday", "Tuesday"]
+      sortedDays = dayQuickSort unsortedDays
+
+  putStrLn "Исходный список чисел:"
+  print unsortedNumbers
+  putStrLn "Отсортированный список чисел:"
+  print sortedNumbers
+
+  putStrLn "\nИсходный список строк:"
+  print unsortedStrings
+  putStrLn "Отсортированный список строк:"
+  print sortedStrings
+
+  putStrLn "\nИсходный список дней недели:"
+  print unsortedDays
+  putStrLn "Отсортированный список дней недели:"
+  print sortedDays
