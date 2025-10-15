@@ -1,12 +1,12 @@
 -- | Функция быстрой сортировки
 -- Принимает на вход список элементов, которые можно сравнивать (Ord)
 -- Возвращает отсортированный список по возрастанию
-quicksort :: Ord a => [a] -> [a]
+quicksort :: (Ord a) => [a] -> [a]
 quicksort [] = []
-quicksort (pivot:rest) =
+quicksort (pivot : rest) =
   let smallerSorted = quicksort [x | x <- rest, x <= pivot]
-      biggerSorted  = quicksort [x | x <- rest, x > pivot]
-  in smallerSorted ++ [pivot] ++ biggerSorted
+      biggerSorted = quicksort [x | x <- rest, x > pivot]
+   in smallerSorted ++ [pivot] ++ biggerSorted
 
 main :: IO ()
 main = do
