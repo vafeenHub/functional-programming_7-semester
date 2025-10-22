@@ -19,7 +19,7 @@ term x i =
       sign = if even i then -1 else 1 -- знак зависит от чётности i: нечет i -> +
    in sign * numerator / denominator
 
--- | Суммирование ряда с точностью epsilon
+-- | Суммирование ряда с точностью epsilon (явная рекурсия)
 -- x - параметр ряда
 -- eps - заданная точность (модуль члена меньше eps - остановка)
 sumSeries :: Double -> Double -> Double
@@ -34,6 +34,17 @@ sumSeries x eps = sumHelper 1 0 -- начинаем с i=1 и начальной
             then acc -- возвращаем накопленную сумму
             else sumHelper (i + 1) (acc + currentTerm) -- иначе добавляем слагаемое и повторяем для следующего i
 
+-- | Суммирование ряда с точностью epsilon с бесконечными списками
+-- x - параметр ряда  
+-- eps - заданная точность (модуль члена меньше eps - остановка)
+sumSeriesInfinite :: Double -> Double -> Double
+sumSeriesInfinite x eps =
+  let terms = map (term x) [1..]  -- бесконечный список слагаемых
+      partialSums = scanl1 (+) terms  -- бесконечный список частичных сумм
+      sumsWithNextTerms = zip partialSums (tail terms)  -- пары: суммы со следующими слагаемыми
+      result = head [s | (s, nextTerm) <- sumsWithNextTerms, abs nextTerm < eps]  -- находим первую сумму, где следующее слагаемое достаточно мало
+  in result
+
 -- | Контрольная формула: sin x - cos x + 1
 checkFormula :: Double -> Double
 checkFormula x = sin x - cos x + 1
@@ -41,11 +52,20 @@ checkFormula x = sin x - cos x + 1
 -- | Пример использования
 main :: IO ()
 main = do
-  let x = 1.0
-  let eps = 1e-6
-  let approx = sumSeries x eps
-  let exact = checkFormula x
+  let x = 0.5
+  let eps = 1e-5
+  let approximateValueRecursive = sumSeries x eps
+  let approximateValueInfinite = sumSeriesInfinite x eps
+  let exactValue = checkFormula x
+  
   putStrLn $ "При x = " ++ show x ++ " и точности ε = " ++ show eps
-  putStrLn $ "Сумма ряда (приближенно): " ++ show approx
-  putStrLn $ "Контрольная формула:       " ++ show exact
-  putStrLn $ "Погрешность:              " ++ show (abs (approx - exact))
+  putStrLn ""
+  putStrLn "Реализация с явной рекурсией:"
+  putStrLn $ "Сумма ряда (приближенно): " ++ show approximateValueRecursive
+  putStrLn $ "Контрольная формула:       " ++ show exactValue
+  putStrLn $ "Погрешность:              " ++ show (abs (approximateValueRecursive - exactValue))
+  putStrLn ""
+  putStrLn "Реализация с бесконечными списками:"
+  putStrLn $ "Сумма ряда (приближенно): " ++ show approximateValueInfinite
+  putStrLn $ "Контрольная формула:       " ++ show exactValue
+  putStrLn $ "Погрешность:              " ++ show (abs (approximateValueInfinite - exactValue))

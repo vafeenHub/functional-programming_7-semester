@@ -40,16 +40,12 @@ angleBetween v1 v2 =
 -- Главная функция программы
 main :: IO ()
 main = do
-    -- Создаем точку A с координатами (3.0, 4.0)
-    let pointA = Point 3.0 4.0
-    -- Создаем точку B с координатами (1.0, 2.0)
-    let pointB = Point 1.0 2.0
+    let pointA = Point 0.0 4.0
+    let pointB = Point 3.0 0.0
     
-    -- Выводим координаты точки A
     putStrLn $ "Точка A: " ++ show pointA
-    -- Выводим координаты точки B
     putStrLn $ "Точка B: " ++ show pointB
-    -- Выводим расстояние между точками A и B
+    
     putStrLn $ "Расстояние A-B: " ++ show (distance pointA pointB)
     -- Выводим скалярное произведение векторов OA и OB
     putStrLn $ "Скалярное произведение A·B: " ++ show (dotProduct pointA pointB)
