@@ -16,7 +16,7 @@ dayQuickSortDays [] = []
 dayQuickSortDays (pivot:rest) =
   let smallerSorted = dayQuickSortDays [x | x <- rest, dayOrder x <= dayOrder pivot]
       biggerSorted  = dayQuickSortDays [x | x <- rest, dayOrder x > dayOrder pivot]
-  in smallerSorted ++ [pivot] ++ biggerSorted
+  in smallerSorted ++ pivot : biggerSorted
 
 -- | Ваша универсальная функция быстрой сортировки для типов с Ord
 quicksort :: (Ord a) => [a] -> [a]
@@ -34,7 +34,7 @@ main = do
       unsortedStrings = ["apple", "banana", "orange", "pear", "kiwi"]
       sortedStrings = quicksort unsortedStrings
 
-      unsortedDays = ["Wednesday", "Monday", "Sunday", "Friday", "Tuesday"]
+      unsortedDays = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
       sortedDays = dayQuickSortDays unsortedDays
 
   putStrLn "Исходный список чисел:"
