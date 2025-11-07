@@ -1,0 +1,20 @@
+{
+  "name": "Haskell (ghcup + runghc)",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "haskell.haskell",
+        "midhunan.haskellrun",
+        "justusadam.language-haskell"
+      ]
+    }
+  },
+  "workspaceFolder": "/workspace",
+  "remoteUser": "root",
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind"
+  ]
+}
