@@ -1,5 +1,5 @@
 {
-  "name": "Haskell (ghcup + runghc)",
+  "name": "Haskell",
   "build": {
     "dockerfile": "Dockerfile"
   },
