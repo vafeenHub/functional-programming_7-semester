@@ -3,6 +3,7 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "runArgs": ["--name", "${localWorkspaceFolderBasename}"],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -12,9 +13,7 @@
       ]
     }
   },
-  "workspaceFolder": "/workspace",
+  "workspaceFolder": "/${localWorkspaceFolderBasename}",
   "remoteUser": "root",
-  "mounts": [
-    "source=${localWorkspaceFolder},target=/workspace,type=bind"
-  ]
+  "mounts": ["source=${localWorkspaceFolder},target=/${localWorkspaceFolderBasename},type=bind"]
 }
