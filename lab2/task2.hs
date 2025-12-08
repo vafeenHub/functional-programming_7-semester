@@ -4,7 +4,7 @@
 data Tree a = Empty | Node a (Tree a) (Tree a)
     deriving (Eq)
 
-sumWithTwoChildren :: Tree Int -> Int
+sumWithTwoChildren :: Tree Int->Int
 sumWithTwoChildren Empty = 0
 sumWithTwoChildren (Node x left right) =
   let

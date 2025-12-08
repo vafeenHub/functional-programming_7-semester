@@ -2,8 +2,8 @@
 -- Написать реализацию этого класса типов для любых двух типов данных, типы данных выбирать такие, чтобы их реализации отличались (можно использовать свои собственные типы данных). 
 
 class Incrmentable a where
-  incrBy :: Int-> a -> a
-  incr :: a -> a
+  incrBy :: Int-> a->a
+  incr :: a->a
   incr = incrBy 1
 
 -- Тут newtype потому что одно поле и не нужно больше
@@ -15,11 +15,11 @@ instance Incrmentable Counter where
   -- incr использует реализацию по умолчанию
 
 -- Тип 2: "часы" по модулю 12 (от 1 до 12)
-data ClockTime = ClockTime Int
+newtype ClockTime = ClockTime Int
   deriving (Show, Eq)
 
-normalize :: Int -> Int
-normalize h = ((h - 1) `mod` 12) + 1  -- 1..12
+normalize :: Int->Int
+normalize h = ((h - 1) `mod` 12)+1  -- 1..12
 
 instance Incrmentable ClockTime where
   incrBy n (ClockTime h) = ClockTime (normalize (h + n))
