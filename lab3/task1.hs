@@ -1,5 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables #-}
-
 import System.Process (system)
 import Data.IORef
 
@@ -54,16 +52,25 @@ convertTo original target = case target of
 -- Проверка принадлежности точки фигуре
 inside :: Shape -> Double -> Double -> Bool
 inside (Square cx cy a) px py =
-  let half = a / 2 in abs (px - cx) <= half && abs (py - cy) <= half
+  let half = a / 2 in abs (px - cx) <= half && abs (py - cy) <= half -- то есть расстояние от любой точки не больше половины
 inside (Rectangle cx cy w h) px py =
-  let hw = w / 2; hh = h / 2 in abs (px - cx) <= hw && abs (py - cy) <= hh
+  let hw = w / 2; hh = h / 2 in abs (px - cx) <= hw && abs (py - cy) <= hh -- то есть расстояние по высоте половина высоты, по ширине половина ширины
+  -- Сторона: a
+-- Высота: h = a * корень(3) / 2 
+-- Центр тяжести (точка пересечения медиан) делит высоту в соотношении 2:1:
+-- от вершины до центра — 2/3 высоты
+-- от центра до основания — 1/3 высоты
+-- =>
+-- topY = cy + (2/3) * height — координата верхней вершины
+-- baseY = cy - (1/3) * height — уровень основания
+
 inside (Triangle cx cy a) px py =
   let height = a * sqrt 3 / 2
       topY = cy + (2/3) * height
       baseY = cy - (1/3) * height
   in py >= baseY && py <= topY &&
-     let ratio = (topY - py) / (topY - baseY)
-         currentHalf = (a / 2) * ratio
+     let ratio = (topY - py) / (topY - baseY) -- расстояние от низа до точки / расстояние от низа до верха 
+         currentHalf = (a / 2) * ratio -- и это поулчается сторона * 0.5 и умножить на текущую дробь на которую мы поднялись
      in abs (px - cx) <= currentHalf
 inside (Circle cx cy r) px py =
   let dx = px - cx; dy = py - cy in dx*dx + dy*dy <= r*r
