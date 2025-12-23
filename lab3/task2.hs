@@ -58,16 +58,9 @@ getAverageScore sessionWriter =
        then 0 
        else totalScore log `div` examCount log
 
--- Вспомогательная функция для объединения нескольких сессий
-combineSessions :: [SessionWriter] -> SessionWriter
-combineSessions sessions = do
-    sequence_ sessions
-
 -- Функция для демонстрации работы
 demoSession :: IO ()
 demoSession = do
-    putStrLn "=== Демонстрация работы функций ==="
-    putStrLn ""
     
     putStrLn "1. Тестовая сессия:"
     let subjects1 = getObjects session
@@ -106,40 +99,3 @@ customSession exams = mapM_ (uncurry passExam) exams
 main :: IO ()
 main = do
     demoSession
-
-    
-    -- Сессия с разным количеством экзаменов
-    putStrLn "\nСессия из одного экзамена"
-    let singleExam = customSession [("Химия", 95)]
-    putStrLn $ "Предметы: " ++ intercalate ", " (getObjects singleExam)
-    putStrLn $ "Средний балл: " ++ show (getAverageScore singleExam)
-    
-    -- Сессия с низкими баллами
-    putStrLn "\nСессия с низкими баллами"
-    let lowScores = customSession [("Литература", 60), ("Биология", 65)]
-    putStrLn $ "Предметы: " ++ intercalate ", " (getObjects lowScores)
-    putStrLn $ "Средний балл: " ++ show (getAverageScore lowScores)
-    
-    -- Проверка порядка сдачи предметов
-    putStrLn "\nПроверка порядка сдачи"
-    let orderedSession = customSession $
-            [("Предмет1", 100), ("Предмет2", 90), ("Предмет3", 80)]
-    putStrLn $ "Порядок сдачи: " ++ intercalate " → " (getObjects orderedSession)
-    putStrLn $ "Средний балл: " ++ show (getAverageScore orderedSession)
-    
-    -- Использование combineSessions
-    putStrLn "\nИспользование combineSessions"
-    let sessionsList = [session, session2]
-    let combined = combineSessions sessionsList
-    putStrLn $ "Всего предметов: " ++ show (length $ getObjects combined)
-    putStrLn $ "Общий средний балл: " ++ show (getAverageScore combined)
-    
-    -- Сессия с баллами от 0 до 100
-    putStrLn "\nСессия с разными типами оценок"
-    let hundredScaleSession = customSession [
-            ("Алгебра", 67),
-            ("Геометрия", 89),
-            ("Тригонометрия", 73)
-            ]
-    putStrLn $ "Предметы: " ++ intercalate ", " (getObjects hundredScaleSession)
-    putStrLn $ "Средний балл: " ++ show (getAverageScore hundredScaleSession)
