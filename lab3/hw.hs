@@ -50,7 +50,6 @@ main = do
       sq = Square (Point 2 2) 3
       tri = Triangle (Point 0 0) (Point 4 0) (Point 2 3)
   
-  putStrLn "Примеры фигур:"
   putStrLn $ "Прямоугольник: " ++ show rect
   putStrLn $ "Квадрат: " ++ show sq
   putStrLn $ "Треугольник: " ++ show tri
