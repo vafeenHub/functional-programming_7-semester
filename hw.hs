@@ -12,7 +12,7 @@ data Shape =
   deriving (Show, Eq)
 
 
---  расстояние от точки до центра координат
+--  расстояние до центра координат
 distanceToPoint :: Point -> Double
 distanceToPoint (Point x y) = sqrt (x*x + y*y)
 
